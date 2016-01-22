@@ -72,6 +72,14 @@ class ActionGroup extends React.Component {
 
 // Has same API as https://facebook.github.io/react-native/docs/actionsheetios.html
 export default class ActionSheet extends React.Component {
+  static propTypes = {
+    screenHeight: PropTypes.number,
+  };
+
+  static defaultProps = {
+    screenHeight: DEVICE_HEIGHT,
+  };
+
   constructor(props, context) {
     super(props, context);
 
@@ -85,7 +93,7 @@ export default class ActionSheet extends React.Component {
       options: null,
       onSelect: null,
       overlayOpacity: new Animated.Value(0),
-      sheetY: new Animated.Value(DEVICE_HEIGHT),
+      sheetY: new Animated.Value(this.props.screenHeight),
       isWaitingForSheetHeight: false,
     };
   }
@@ -152,7 +160,7 @@ export default class ActionSheet extends React.Component {
     });
 
     this.state.overlayOpacity.setValue(0);
-    this.state.sheetY.setValue(DEVICE_HEIGHT);
+    this.state.sheetY.setValue(this.props.screenHeight);
 
     Animated.timing(this.state.overlayOpacity, {
       toValue: 0.3,
@@ -200,7 +208,7 @@ export default class ActionSheet extends React.Component {
     });
 
     Animated.timing(this.state.sheetY, {
-      toValue: DEVICE_HEIGHT,
+      toValue: this.props.screenHeight,
       easing: Easing.inOut(Easing.ease),
       duration: Y_ANIMATION_TIME,
     }).start();
@@ -218,9 +226,9 @@ export default class ActionSheet extends React.Component {
       isWaitingForSheetHeight: false,
     });
 
-    this.state.sheetY.setValue(DEVICE_HEIGHT);
+    this.state.sheetY.setValue(this.props.screenHeight);
     Animated.timing(this.state.sheetY, {
-      toValue: DEVICE_HEIGHT - height,
+      toValue: this.props.screenHeight - height,
       easing: Easing.inOut(Easing.ease),
       duration: Y_ANIMATION_TIME,
     }).start(result => {
